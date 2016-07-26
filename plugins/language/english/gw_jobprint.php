@@ -1,7 +1,6 @@
 <?php
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
-
 // tags
 $_GW_TAG_DANGER_IMAGE[$LANGID]   = 'plugins/images/danger.png';
 $_GW_TAG_DO_NOT_OPERATE[$LANGID] = 'Do Not Operate';

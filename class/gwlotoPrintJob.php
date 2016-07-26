@@ -12,7 +12,6 @@
 
 defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
 
-
 include_once __DIR__ . '/../include/common.php';
 include_once __DIR__ . '/../include/jobstatus.php';
 include_once __DIR__ . '/../include/seqoptions.php';

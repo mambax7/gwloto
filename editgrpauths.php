@@ -11,7 +11,7 @@
  */
 
 include '../../mainfile.php';
-$GLOBALS['xoopsOption']['template_main'] = 'gwloto_editauths.html';
+$GLOBALS['xoopsOption']['template_main'] = 'gwloto_editauths.tpl';
 include XOOPS_ROOT_PATH . '/header.php';
 $currentscript = basename(__FILE__);
 include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';

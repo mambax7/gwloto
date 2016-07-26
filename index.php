@@ -11,7 +11,7 @@
  */
 
 include __DIR__ . '/../../mainfile.php';
-$GLOBALS['xoopsOption']['template_main'] = 'gwloto_index.html';
+$GLOBALS['xoopsOption']['template_main'] = 'gwloto_index.tpl';
 include XOOPS_ROOT_PATH . '/header.php';
 
 include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';

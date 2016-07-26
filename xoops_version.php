@@ -19,7 +19,7 @@ $modversion['author']      = 'Richard Griffith - richard@geekwright.com';
 $modversion['credits']     = 'geekwight, LLC';
 $modversion['license']     = 'GNU General Public License V2 or later';
 $modversion['official']    = 0;
-$modversion['image'] = 'images/icon.png';
+$modversion['image']       = 'images/icon.png';
 
 $modversion['dirname'] = basename(__DIR__);
 
@@ -166,50 +166,50 @@ $modversion['blocks'][1] = array(
     'show_func'   => 'b_gwloto_assigned_block_show',
     'edit_func'   => 'b_gwloto_assigned_block_edit',
     'options'     => 'desc|10',
-    'template'    => 'gwloto_block.html'
+    'template'    => 'gwloto_block.tpl'
 );
 
 // Templates
 $i                                          = 1;
-$modversion['templates'][$i]['file']        = 'gwloto_place_crumbs.html';
+$modversion['templates'][$i]['file']        = 'gwloto_place_crumbs.tpl';
 $modversion['templates'][$i]['description'] = 'Place Breadcrumbs';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_action_menu.html';
+$modversion['templates'][$i]['file']        = 'gwloto_action_menu.tpl';
 $modversion['templates'][$i]['description'] = 'Action Menu';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_header.html';
+$modversion['templates'][$i]['file']        = 'gwloto_header.tpl';
 $modversion['templates'][$i]['description'] = 'Page Header';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_job_list.html';
+$modversion['templates'][$i]['file']        = 'gwloto_job_list.tpl';
 $modversion['templates'][$i]['description'] = 'Job List';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_media_list.html';
+$modversion['templates'][$i]['file']        = 'gwloto_media_list.tpl';
 $modversion['templates'][$i]['description'] = 'Attached Media';
 
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_index.html';
+$modversion['templates'][$i]['file']        = 'gwloto_index.tpl';
 $modversion['templates'][$i]['description'] = 'Module Index';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_editauths.html';
+$modversion['templates'][$i]['file']        = 'gwloto_editauths.tpl';
 $modversion['templates'][$i]['description'] = 'Edit Authorities';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_viewplan.html';
+$modversion['templates'][$i]['file']        = 'gwloto_viewplan.tpl';
 $modversion['templates'][$i]['description'] = 'View Control Plan';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_editpoint.html';
+$modversion['templates'][$i]['file']        = 'gwloto_editpoint.tpl';
 $modversion['templates'][$i]['description'] = 'Edit Control Points';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_sortpoint.html';
+$modversion['templates'][$i]['file']        = 'gwloto_sortpoint.tpl';
 $modversion['templates'][$i]['description'] = 'Sort Control Points';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_viewjob.html';
+$modversion['templates'][$i]['file']        = 'gwloto_viewjob.tpl';
 $modversion['templates'][$i]['description'] = 'View Job';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_printjob.html';
+$modversion['templates'][$i]['file']        = 'gwloto_printjob.tpl';
 $modversion['templates'][$i]['description'] = 'Print Job';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_editmedia.html';
+$modversion['templates'][$i]['file']        = 'gwloto_editmedia.tpl';
 $modversion['templates'][$i]['description'] = 'Media Center';
 ++$i;
-$modversion['templates'][$i]['file']        = 'gwloto_listjobs.html';
+$modversion['templates'][$i]['file']        = 'gwloto_listjobs.tpl';
 $modversion['templates'][$i]['description'] = 'List Jobs';

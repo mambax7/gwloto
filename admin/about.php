@@ -10,7 +10,7 @@
 
 include __DIR__ . '/header.php';
 
-echo $moduleAdmin->addNavigation('about.php');
+echo $moduleAdmin->addNavigation(basename(__FILE__));
 echo $moduleAdmin->renderAbout('', false);
 
 include __DIR__ . '/footer.php';
