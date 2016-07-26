@@ -3,11 +3,15 @@
 <div><{$body}></div>
 <{/if}>
 <{if is_array($placesummary) && count($placesummary) > 0 }>
-<br />
+<br/>
 <{foreach key=pid item=pl from=$placesummary }>
 <table width='100%' border='0' cellspacing='1' class='outer'>
-<tr><th><{$pl.header}></th></tr>
-<tr><td><{$pl.detail}></td></tr>
+    <tr>
+        <th><{$pl.header}></th>
+    </tr>
+    <tr>
+        <td><{$pl.detail}></td>
+    </tr>
 </table>
 <{/foreach}>
 <{/if}>
@@ -15,5 +19,6 @@
 <{include file="db:gwloto_job_list.html"}>
 
 <{if isset($debug)}>
-<br /><div><{$debug}></div>
+<br/>
+<div><{$debug}></div>
 <{/if}>

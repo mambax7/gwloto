@@ -1,42 +1,40 @@
 <?php
 /**
-* select.php - clipboard operations move, copy, delete
-*
-* This file is part of gwloto - geekwright lockout tagout
-*
-* @copyright  Copyright © 2010 geekwright, LLC. All rights reserved.
-* @license    gwloto/docs/license.txt  GNU General Public License (GPL)
-* @since      1.0
-* @author     Richard Griffith <richard@geekwright.com>
-* @package    gwloto
-* @version    $Id$
-*/
+ * select.php - clipboard operations move, copy, delete
+ *
+ * This file is part of gwloto - geekwright lockout tagout
+ *
+ * @copyright  Copyright © 2010 geekwright, LLC. All rights reserved.
+ * @license    gwloto/docs/license.txt  GNU General Public License (GPL)
+ * @author     Richard Griffith <richard@geekwright.com>
+ * @package    gwloto
+ */
 
-include '../../mainfile.php';
+include __DIR__ . '/../../mainfile.php';
 $GLOBALS['xoopsOption']['template_main'] = 'gwloto_index.html';
-include(XOOPS_ROOT_PATH.'/header.php');
-$currentscript=basename(__FILE__) ;
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
-include('include/userauth.php');
-include('include/userauthlist.php');
-include('include/common.php');
-include('include/placeenv.php');
-include('include/actionmenu.php');
+include XOOPS_ROOT_PATH . '/header.php';
+$currentscript = basename(__FILE__);
+include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+include __DIR__ . '/include/userauth.php';
+include __DIR__ . '/include/userauthlist.php';
+include __DIR__ . '/include/common.php';
+include __DIR__ . '/include/placeenv.php';
+include __DIR__ . '/include/actionmenu.php';
 
 function getCountAsParentPlace($pid)
 {
     global $xoopsDB;
 
-    $cnt=0;
+    $cnt = 0;
 
-    $sql='SELECT count(*) as count FROM '. $xoopsDB->prefix('gwloto_place');
-    $sql.= " WHERE parent_id = $pid ";
+    $sql = 'SELECT count(*) as count FROM ' . $xoopsDB->prefix('gwloto_place');
+    $sql .= " WHERE parent_id = $pid ";
 
     $result = $xoopsDB->query($sql);
     if ($result) {
-        $myrow=$xoopsDB->fetchArray($result);
+        $myrow = $xoopsDB->fetchArray($result);
         if ($myrow) {
-            $cnt=$myrow['count'];
+            $cnt = $myrow['count'];
         }
     }
 
@@ -47,110 +45,107 @@ function getCountOfPlacePlans($pid)
 {
     global $xoopsDB;
 
-    $cnt=0;
+    $cnt = 0;
 
-    $sql='SELECT count(*) as count FROM '. $xoopsDB->prefix('gwloto_cplan');
-    $sql.= " WHERE place_id = $pid ";
+    $sql = 'SELECT count(*) as count FROM ' . $xoopsDB->prefix('gwloto_cplan');
+    $sql .= " WHERE place_id = $pid ";
 
     $result = $xoopsDB->query($sql);
     if ($result) {
-        $myrow=$xoopsDB->fetchArray($result);
+        $myrow = $xoopsDB->fetchArray($result);
         if ($myrow) {
-            $cnt=$myrow['count'];
+            $cnt = $myrow['count'];
         }
     }
 
     return $cnt;
 }
 
-
 function getParentPlace($pid)
 {
     global $xoopsDB;
 
-    $ppid=0;
+    $ppid = 0;
 
-    $sql='SELECT parent_id FROM '. $xoopsDB->prefix('gwloto_place');
-    $sql.= " WHERE place_id = $pid ";
+    $sql = 'SELECT parent_id FROM ' . $xoopsDB->prefix('gwloto_place');
+    $sql .= " WHERE place_id = $pid ";
 
     $result = $xoopsDB->query($sql);
     if ($result) {
-        $myrow=$xoopsDB->fetchArray($result);
+        $myrow = $xoopsDB->fetchArray($result);
         if ($myrow) {
-            $ppid=$myrow['parent_id'];
+            $ppid = $myrow['parent_id'];
         }
     }
 
     return $ppid;
 }
 
-
 function deletePlace($pid)
 {
     global $xoopsDB;
     global $err_message;
 
+    $placecnt = getCountAsParentPlace($pid);
+    $plancnt  = getCountOfPlacePlans($pid);
 
-    $placecnt=getCountAsParentPlace($pid);
-    $plancnt=getCountOfPlacePlans($pid);
-
-    if ($placecnt>0 || $plancnt>0) {
-        $err_message=sprintf(_MD_GWLOTO_DELETE_SEL_PLACE_IN_USE, $placecnt, $plancnt);
+    if ($placecnt > 0 || $plancnt > 0) {
+        $err_message = sprintf(_MD_GWLOTO_DELETE_SEL_PLACE_IN_USE, $placecnt, $plancnt);
         return false;
     }
 
-/*  if(getParentPlace($pid)==0) {
-        if(getCountAsParentPlace(0)==1) {
-            $err_message=sprintf(_MD_GWLOTO_DELETE_SEL_ONLY_TOP_PLACE, $placecnt, $plancnt);
-            return false;
+    /*  if(getParentPlace($pid)==0) {
+            if(getCountAsParentPlace(0)==1) {
+                $err_message=sprintf(_MD_GWLOTO_DELETE_SEL_ONLY_TOP_PLACE, $placecnt, $plancnt);
+                return false;
+            }
         }
-    }
-*/
-    $dberr=false;
-    $dbmsg='';
+    */
+    $dberr = false;
+    $dbmsg = '';
     startTransaction();
 
     if (!$dberr) {
-        $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_place_detail');
-        $sql.= " WHERE place = $pid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_place_detail');
+        $sql .= " WHERE place = $pid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if (!$dberr) {
-        $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_place');
-        $sql.= " WHERE place_id = $pid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_place');
+        $sql .= " WHERE place_id = $pid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if (!$dberr) {
-        $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_user_auth');
-        $sql.= " WHERE place_id = $pid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_user_auth');
+        $sql .= " WHERE place_id = $pid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if (!$dberr) {
-        $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_media_attach');
-        $sql.= " WHERE attach_type = 'place' AND generic_id = $pid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_media_attach');
+        $sql .= " WHERE attach_type = 'place' AND generic_id = $pid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
@@ -158,7 +153,7 @@ function deletePlace($pid)
         commitTransaction();
     } else {
         rollbackTransaction();
-        $err_message = _MD_GWLOTO_DELETE_SEL_ERR .' '.$dbmsg;
+        $err_message = _MD_GWLOTO_DELETE_SEL_ERR . ' ' . $dbmsg;
     }
     return !$dberr;
 }
@@ -167,62 +162,62 @@ function deletePlan($cpid)
 {
     global $xoopsDB;
     global $err_message;
-    $dberr=false;
-    $dbmsg='';
+    $dberr = false;
+    $dbmsg = '';
     startTransaction();
 
-    $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_cpoint_detail');
-    $sql.= ' WHERE cpoint IN ';
-    $sql.= ' (select cpoint_id FROM '. $xoopsDB->prefix('gwloto_cpoint');
-    $sql.= " WHERE cplan_id = $cpid )";
+    $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_cpoint_detail');
+    $sql .= ' WHERE cpoint IN ';
+    $sql .= ' (select cpoint_id FROM ' . $xoopsDB->prefix('gwloto_cpoint');
+    $sql .= " WHERE cplan_id = $cpid )";
 
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
-        $dberr=true;
-        $dbmsg=formatDBError();
+        $dberr = true;
+        $dbmsg = formatDBError();
     }
 
     if (!$dberr) {
-        $sql='DELETE FROM '.$xoopsDB->prefix('gwloto_cpoint');
-        $sql.= " WHERE cplan_id = $cpid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_cpoint');
+        $sql .= " WHERE cplan_id = $cpid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if (!$dberr) {
-        $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_cplan_detail');
-        $sql.= " WHERE cplan = $cpid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_cplan_detail');
+        $sql .= " WHERE cplan = $cpid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if (!$dberr) {
-        $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_cplan');
-        $sql.= " WHERE cplan_id = $cpid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_cplan');
+        $sql .= " WHERE cplan_id = $cpid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if (!$dberr) {
-        $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_media_attach');
-        $sql.= " WHERE attach_type = 'plan' AND generic_id = $cpid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_media_attach');
+        $sql .= " WHERE attach_type = 'plan' AND generic_id = $cpid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
@@ -230,7 +225,7 @@ function deletePlan($cpid)
         commitTransaction();
     } else {
         rollbackTransaction();
-        $err_message = _MD_GWLOTO_DELETE_SEL_ERR .' '.$dbmsg;
+        $err_message = _MD_GWLOTO_DELETE_SEL_ERR . ' ' . $dbmsg;
     }
     return !$dberr;
 }
@@ -239,38 +234,38 @@ function deletePoint($ptid)
 {
     global $xoopsDB;
     global $err_message;
-    $dberr=false;
-    $dbmsg='';
+    $dberr = false;
+    $dbmsg = '';
     startTransaction();
 
-    $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_cpoint_detail');
-    $sql.= " WHERE cpoint = $ptid ";
+    $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_cpoint_detail');
+    $sql .= " WHERE cpoint = $ptid ";
 
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
-        $dberr=true;
-        $dbmsg=formatDBError();
+        $dberr = true;
+        $dbmsg = formatDBError();
     }
 
     if (!$dberr) {
-        $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_cpoint');
-        $sql.= " WHERE cpoint_id = $ptid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_cpoint');
+        $sql .= " WHERE cpoint_id = $ptid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if (!$dberr) {
-        $sql='DELETE FROM '. $xoopsDB->prefix('gwloto_media_attach');
-        $sql.= " WHERE attach_type = 'point' AND generic_id = $ptid ";
+        $sql = 'DELETE FROM ' . $xoopsDB->prefix('gwloto_media_attach');
+        $sql .= " WHERE attach_type = 'point' AND generic_id = $ptid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
@@ -278,10 +273,9 @@ function deletePoint($ptid)
         commitTransaction();
     } else {
         rollbackTransaction();
-        $err_message = _MD_GWLOTO_DELETE_SEL_ERR .' '.$dbmsg;
+        $err_message = _MD_GWLOTO_DELETE_SEL_ERR . ' ' . $dbmsg;
     }
     return !$dberr;
-
 
     return true;
 }
@@ -290,11 +284,11 @@ function copyMediaAttach($attach_type, $oldid, $newid, $uid)
 {
     global $xoopsDB;
 
-    $sql ='INSERT INTO '.$xoopsDB->prefix('gwloto_media_attach');
-    $sql.=' (attach_type, generic_id, media_id, media_order, required, last_changed_by, last_changed_on) ';
-    $sql.=" SELECT attach_type, $newid, media_id, media_order, required, $uid, UNIX_TIMESTAMP() ";
-    $sql.=' FROM '.$xoopsDB->prefix('gwloto_media_attach');
-    $sql.=" WHERE generic_id = $oldid AND attach_type='$attach_type' ";
+    $sql = 'INSERT INTO ' . $xoopsDB->prefix('gwloto_media_attach');
+    $sql .= ' (attach_type, generic_id, media_id, media_order, required, last_changed_by, last_changed_on) ';
+    $sql .= " SELECT attach_type, $newid, media_id, media_order, required, $uid, UNIX_TIMESTAMP() ";
+    $sql .= ' FROM ' . $xoopsDB->prefix('gwloto_media_attach');
+    $sql .= " WHERE generic_id = $oldid AND attach_type='$attach_type' ";
 
     $result = $xoopsDB->queryF($sql);
     if ($result) {
@@ -307,76 +301,76 @@ function copyMediaAttach($attach_type, $oldid, $newid, $uid)
 function copyPlan($pid, $cpid, $uid)
 {
     global $xoopsDB;
-    global $err_message,$myuserid;
-    $dberr=false;
-    $dbmsg='';
+    global $err_message, $myuserid;
+    $dberr = false;
+    $dbmsg = '';
     startTransaction();
 
-    $cpointcnt=getCPointCounts($cpid);
-    $nextseq=$cpointcnt['count']+1;
+    $cpointcnt = getCPointCounts($cpid);
+    $nextseq   = $cpointcnt['count'] + 1;
 
-    $sql ='INSERT INTO '.$xoopsDB->prefix('gwloto_cplan');
-    $sql.=' (place_id, last_changed_by, last_changed_on) ';
-    $sql.=" VALUES($pid, $uid, UNIX_TIMESTAMP()) ";
+    $sql = 'INSERT INTO ' . $xoopsDB->prefix('gwloto_cplan');
+    $sql .= ' (place_id, last_changed_by, last_changed_on) ';
+    $sql .= " VALUES($pid, $uid, UNIX_TIMESTAMP()) ";
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
-        $dberr=true;
-        $dbmsg=formatDBError();
+        $dberr = true;
+        $dbmsg = formatDBError();
     }
 
     if (!$dberr) {
         $new_plan_id = $xoopsDB->getInsertId();
-        $copyof=_MD_GWLOTO_COPY_NAME_PREFIX;
-        $sql ='INSERT INTO '.$xoopsDB->prefix('gwloto_cplan_detail');
-        $sql.=' (cplan, language_id, cplan_name, cplan_review, hazard_inventory, required_ppe, authorized_personnel, additional_requirements, last_changed_by, last_changed_on) ';
-        $sql.=" SELECT $new_plan_id, language_id, CONCAT('$copyof',cplan_name), cplan_review, hazard_inventory, required_ppe, authorized_personnel, additional_requirements, $uid, UNIX_TIMESTAMP() ";
-        $sql.=' FROM '.$xoopsDB->prefix('gwloto_cplan_detail');
-        $sql.=" WHERE cplan = $cpid ";
+        $copyof      = _MD_GWLOTO_COPY_NAME_PREFIX;
+        $sql         = 'INSERT INTO ' . $xoopsDB->prefix('gwloto_cplan_detail');
+        $sql .= ' (cplan, language_id, cplan_name, cplan_review, hazard_inventory, required_ppe, authorized_personnel, additional_requirements, last_changed_by, last_changed_on) ';
+        $sql .= " SELECT $new_plan_id, language_id, CONCAT('$copyof',cplan_name), cplan_review, hazard_inventory, required_ppe, authorized_personnel, additional_requirements, $uid, UNIX_TIMESTAMP() ";
+        $sql .= ' FROM ' . $xoopsDB->prefix('gwloto_cplan_detail');
+        $sql .= " WHERE cplan = $cpid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if (!$dberr) {
         copyMediaAttach('plan', $cpid, $new_plan_id, $uid);
-        $cpoints=array();
+        $cpoints = array();
 
-        $sql='SELECT * FROM '. $xoopsDB->prefix('gwloto_cpoint');
-        $sql.= " WHERE cplan_id = $cpid ";
+        $sql = 'SELECT * FROM ' . $xoopsDB->prefix('gwloto_cpoint');
+        $sql .= " WHERE cplan_id = $cpid ";
 
         $result = $xoopsDB->query($sql);
         if ($result) {
-            while ($myrow=$xoopsDB->fetchArray($result)) {
-                $cpoints[]=$myrow;
+            while ($myrow = $xoopsDB->fetchArray($result)) {
+                $cpoints[] = $myrow;
             }
         } else {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if (!$dberr) {
-        foreach ($cpoints as $i=>$r) {
-            $seq_disconnect=$r['seq_disconnect'];
-            $seq_reconnect=$r['seq_reconnect'];
-            $seq_inspection=$r['seq_inspection'];
-            $locks_required=$r['locks_required'];
-            $tags_required=$r['tags_required'];
+        foreach ($cpoints as $i => $r) {
+            $seq_disconnect = $r['seq_disconnect'];
+            $seq_reconnect  = $r['seq_reconnect'];
+            $seq_inspection = $r['seq_inspection'];
+            $locks_required = $r['locks_required'];
+            $tags_required  = $r['tags_required'];
 
-            $sql ='INSERT INTO '.$xoopsDB->prefix('gwloto_cpoint');
-            $sql.=' (cplan_id, seq_disconnect, seq_reconnect, seq_inspection, locks_required, tags_required) ';
-            $sql.=" VALUES ($new_plan_id, $seq_disconnect, $seq_reconnect, $seq_inspection, $locks_required, $tags_required ) ";
+            $sql = 'INSERT INTO ' . $xoopsDB->prefix('gwloto_cpoint');
+            $sql .= ' (cplan_id, seq_disconnect, seq_reconnect, seq_inspection, locks_required, tags_required) ';
+            $sql .= " VALUES ($new_plan_id, $seq_disconnect, $seq_reconnect, $seq_inspection, $locks_required, $tags_required ) ";
 
             $result = $xoopsDB->queryF($sql);
             if ($result) {
                 $cpoints[$i]['new_cpoint'] = $xoopsDB->getInsertId();
                 copyMediaAttach('point', $cpoints[$i]['cpoint_id'], $cpoints[$i]['new_cpoint'], $uid);
             } else {
-                $dberr=true;
-                $dbmsg=formatDBError();
+                $dberr = true;
+                $dbmsg = formatDBError();
                 break;
             }
         }
@@ -384,19 +378,19 @@ function copyPlan($pid, $cpid, $uid)
 
     if (!$dberr) {
         foreach ($cpoints as $r) {
-            $cpoint_id=$r['cpoint_id'];
-            $new_cpoint=$r['new_cpoint'];
+            $cpoint_id  = $r['cpoint_id'];
+            $new_cpoint = $r['new_cpoint'];
 
-            $sql ='INSERT INTO '.$xoopsDB->prefix('gwloto_cpoint_detail');
-            $sql.=' (cpoint, language_id, cpoint_name, disconnect_state, disconnect_instructions, reconnect_state, reconnect_instructions, inspection_state, inspection_instructions, last_changed_by, last_changed_on) ';
-            $sql.=" SELECT $new_cpoint, language_id, cpoint_name, disconnect_state, disconnect_instructions, reconnect_state, reconnect_instructions, inspection_state, inspection_instructions, $uid, UNIX_TIMESTAMP() ";
-            $sql.=' FROM '.$xoopsDB->prefix('gwloto_cpoint_detail');
-            $sql.=" WHERE cpoint = $cpoint_id ";
+            $sql = 'INSERT INTO ' . $xoopsDB->prefix('gwloto_cpoint_detail');
+            $sql .= ' (cpoint, language_id, cpoint_name, disconnect_state, disconnect_instructions, reconnect_state, reconnect_instructions, inspection_state, inspection_instructions, last_changed_by, last_changed_on) ';
+            $sql .= " SELECT $new_cpoint, language_id, cpoint_name, disconnect_state, disconnect_instructions, reconnect_state, reconnect_instructions, inspection_state, inspection_instructions, $uid, UNIX_TIMESTAMP() ";
+            $sql .= ' FROM ' . $xoopsDB->prefix('gwloto_cpoint_detail');
+            $sql .= " WHERE cpoint = $cpoint_id ";
 
             $result = $xoopsDB->queryF($sql);
             if (!$result) {
-                $dberr=true;
-                $dbmsg=formatDBError();
+                $dberr = true;
+                $dbmsg = formatDBError();
                 break;
             }
         }
@@ -404,7 +398,7 @@ function copyPlan($pid, $cpid, $uid)
 
     if ($dberr) {
         rollbackTransaction();
-        $err_message = _MD_GWLOTO_COPY_SEL_ERR .' '.$dbmsg;
+        $err_message = _MD_GWLOTO_COPY_SEL_ERR . ' ' . $dbmsg;
         return false;
     } else {
         commitTransaction();
@@ -415,45 +409,45 @@ function copyPlan($pid, $cpid, $uid)
 function copyPoint($cpid, $ptid, $uid)
 {
     global $xoopsDB;
-    global $err_message,$myuserid;
-    $dberr=false;
-    $dbmsg='';
+    global $err_message, $myuserid;
+    $dberr = false;
+    $dbmsg = '';
     startTransaction();
 
-    $cpointcnt=getCPointCounts($cpid);
-    $nextseq=$cpointcnt['count']+1;
+    $cpointcnt = getCPointCounts($cpid);
+    $nextseq   = $cpointcnt['count'] + 1;
 
-    $sql ='INSERT INTO '.$xoopsDB->prefix('gwloto_cpoint');
-    $sql.=' (cplan_id, seq_disconnect, seq_reconnect, seq_inspection, locks_required, tags_required) ';
-    $sql.=" SELECT $cpid, $nextseq, $nextseq, $nextseq, locks_required, tags_required ";
-    $sql.=' FROM '.$xoopsDB->prefix('gwloto_cpoint');
-    $sql.=" WHERE cpoint_id = $ptid ";
+    $sql = 'INSERT INTO ' . $xoopsDB->prefix('gwloto_cpoint');
+    $sql .= ' (cplan_id, seq_disconnect, seq_reconnect, seq_inspection, locks_required, tags_required) ';
+    $sql .= " SELECT $cpid, $nextseq, $nextseq, $nextseq, locks_required, tags_required ";
+    $sql .= ' FROM ' . $xoopsDB->prefix('gwloto_cpoint');
+    $sql .= " WHERE cpoint_id = $ptid ";
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
-        $dberr=true;
-        $dbmsg=formatDBError();
+        $dberr = true;
+        $dbmsg = formatDBError();
     }
 
     if (!$dberr) {
         $new_point_id = $xoopsDB->getInsertId();
         copyMediaAttach('point', $ptid, $new_point_id, $uid);
 
-        $sql ='INSERT INTO '.$xoopsDB->prefix('gwloto_cpoint_detail');
-        $sql.=' (cpoint, language_id, cpoint_name, disconnect_instructions, disconnect_state, reconnect_instructions, reconnect_state, inspection_state, inspection_instructions, last_changed_by, last_changed_on) ';
-        $sql.=" SELECT $new_point_id, language_id, cpoint_name, disconnect_instructions, disconnect_state, reconnect_instructions, reconnect_state, inspection_state, inspection_instructions, $uid, UNIX_TIMESTAMP() ";
-        $sql.=' FROM '.$xoopsDB->prefix('gwloto_cpoint_detail');
-        $sql.=" WHERE cpoint = $ptid ";
+        $sql = 'INSERT INTO ' . $xoopsDB->prefix('gwloto_cpoint_detail');
+        $sql .= ' (cpoint, language_id, cpoint_name, disconnect_instructions, disconnect_state, reconnect_instructions, reconnect_state, inspection_state, inspection_instructions, last_changed_by, last_changed_on) ';
+        $sql .= " SELECT $new_point_id, language_id, cpoint_name, disconnect_instructions, disconnect_state, reconnect_instructions, reconnect_state, inspection_state, inspection_instructions, $uid, UNIX_TIMESTAMP() ";
+        $sql .= ' FROM ' . $xoopsDB->prefix('gwloto_cpoint_detail');
+        $sql .= " WHERE cpoint = $ptid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
     if ($dberr) {
         rollbackTransaction();
-        $err_message = _MD_GWLOTO_COPY_SEL_ERR .' '.$dbmsg;
+        $err_message = _MD_GWLOTO_COPY_SEL_ERR . ' ' . $dbmsg;
         return false;
     } else {
         commitTransaction();
@@ -465,34 +459,34 @@ function movePoint($cpid, $ptid, $uid)
 {
     global $xoopsDB;
     global $err_message;
-    $dberr=false;
-    $dbmsg='';
+    $dberr = false;
+    $dbmsg = '';
     startTransaction();
 
-    $cpointcnt=getCPointCounts($cpid);
-    $nextseq=$cpointcnt['count']+1;
+    $cpointcnt = getCPointCounts($cpid);
+    $nextseq   = $cpointcnt['count'] + 1;
 
-    $sql ='UPDATE '.$xoopsDB->prefix('gwloto_cpoint');
-    $sql.=" SET cplan_id = $cpid ";
-    $sql.=", seq_disconnect=$nextseq, seq_reconnect=$nextseq, seq_inspection=$nextseq ";
-    $sql.=" WHERE cpoint_id = $ptid";
+    $sql = 'UPDATE ' . $xoopsDB->prefix('gwloto_cpoint');
+    $sql .= " SET cplan_id = $cpid ";
+    $sql .= ", seq_disconnect=$nextseq, seq_reconnect=$nextseq, seq_inspection=$nextseq ";
+    $sql .= " WHERE cpoint_id = $ptid";
 
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
-        $dberr=true;
-        $dbmsg=formatDBError();
+        $dberr = true;
+        $dbmsg = formatDBError();
     }
 
     if (!$dberr) {
-        $sql ='UPDATE '.$xoopsDB->prefix('gwloto_cpoint_detail');
-        $sql.=" SET last_changed_by = $uid ";
-        $sql.="   , last_changed_on = UNIX_TIMESTAMP() ";
-        $sql.=" WHERE cpoint = $ptid ";
+        $sql = 'UPDATE ' . $xoopsDB->prefix('gwloto_cpoint_detail');
+        $sql .= " SET last_changed_by = $uid ";
+        $sql .= '   , last_changed_on = UNIX_TIMESTAMP() ';
+        $sql .= " WHERE cpoint = $ptid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
@@ -500,7 +494,7 @@ function movePoint($cpid, $ptid, $uid)
         commitTransaction();
     } else {
         rollbackTransaction();
-        $err_message = _MD_GWLOTO_MOVE_SEL_ERR .' '.$dbmsg;
+        $err_message = _MD_GWLOTO_MOVE_SEL_ERR . ' ' . $dbmsg;
     }
     return !$dberr;
 }
@@ -509,32 +503,32 @@ function movePlan($pid, $cpid, $uid)
 {
     global $xoopsDB;
     global $err_message;
-    $dberr=false;
-    $dbmsg='';
+    $dberr = false;
+    $dbmsg = '';
     startTransaction();
 
-    $sql ='UPDATE '.$xoopsDB->prefix('gwloto_cplan');
-    $sql.=" SET place_id = $pid ";
-    $sql.=" , last_changed_by = $uid ";
-    $sql.=" , last_changed_on = UNIX_TIMESTAMP() ";
-    $sql.=" WHERE cplan_id = $cpid ";
+    $sql = 'UPDATE ' . $xoopsDB->prefix('gwloto_cplan');
+    $sql .= " SET place_id = $pid ";
+    $sql .= " , last_changed_by = $uid ";
+    $sql .= ' , last_changed_on = UNIX_TIMESTAMP() ';
+    $sql .= " WHERE cplan_id = $cpid ";
 
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
-        $dberr=true;
-        $dbmsg=formatDBError();
+        $dberr = true;
+        $dbmsg = formatDBError();
     }
 
     if (!$dberr) {
-        $sql ='UPDATE '.$xoopsDB->prefix('gwloto_cplan_detail');
-        $sql.=" SET last_changed_by = $uid ";
-        $sql.="   , last_changed_on = UNIX_TIMESTAMP() ";
-        $sql.=" WHERE cplan = $cpid ";
+        $sql = 'UPDATE ' . $xoopsDB->prefix('gwloto_cplan_detail');
+        $sql .= " SET last_changed_by = $uid ";
+        $sql .= '   , last_changed_on = UNIX_TIMESTAMP() ';
+        $sql .= " WHERE cplan = $cpid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
@@ -542,7 +536,7 @@ function movePlan($pid, $cpid, $uid)
         commitTransaction();
     } else {
         rollbackTransaction();
-        $err_message = _MD_GWLOTO_MOVE_SEL_ERR .' '.$dbmsg;
+        $err_message = _MD_GWLOTO_MOVE_SEL_ERR . ' ' . $dbmsg;
     }
     return !$dberr;
 }
@@ -551,38 +545,38 @@ function movePlace($pid, $parent_pid, $uid)
 {
     global $xoopsDB;
     global $err_message;
-    $dberr=false;
-    $dbmsg='';
+    $dberr = false;
+    $dbmsg = '';
     startTransaction();
 
     // this shouldn't happen, but just in case
-    if (getParentPlace($pid)==0) {
-        if (getCountAsParentPlace(0)==1) {
-            $err_message=sprintf(_MD_GWLOTO_DELETE_SEL_ONLY_TOP_PLACE, $placecnt, $plancnt);
+    if (getParentPlace($pid) == 0) {
+        if (getCountAsParentPlace(0) == 1) {
+            $err_message = sprintf(_MD_GWLOTO_DELETE_SEL_ONLY_TOP_PLACE, $placecnt, $plancnt);
             return false;
         }
     }
 
-    $sql ='UPDATE '.$xoopsDB->prefix('gwloto_place');
-    $sql.=" SET parent_id = $parent_pid ";
-    $sql.=" WHERE place_id = $pid";
+    $sql = 'UPDATE ' . $xoopsDB->prefix('gwloto_place');
+    $sql .= " SET parent_id = $parent_pid ";
+    $sql .= " WHERE place_id = $pid";
 
     $result = $xoopsDB->queryF($sql);
     if (!$result) {
-        $dberr=true;
-        $dbmsg=formatDBError();
+        $dberr = true;
+        $dbmsg = formatDBError();
     }
 
     if (!$dberr) {
-        $sql ='UPDATE '.$xoopsDB->prefix('gwloto_place_detail');
-        $sql.=" SET last_changed_by = $uid ";
-        $sql.="   , last_changed_on = UNIX_TIMESTAMP() ";
-        $sql.=" WHERE place = $pid ";
+        $sql = 'UPDATE ' . $xoopsDB->prefix('gwloto_place_detail');
+        $sql .= " SET last_changed_by = $uid ";
+        $sql .= '   , last_changed_on = UNIX_TIMESTAMP() ';
+        $sql .= " WHERE place = $pid ";
 
         $result = $xoopsDB->queryF($sql);
         if (!$result) {
-            $dberr=true;
-            $dbmsg=formatDBError();
+            $dberr = true;
+            $dbmsg = formatDBError();
         }
     }
 
@@ -590,7 +584,7 @@ function movePlace($pid, $parent_pid, $uid)
         commitTransaction();
     } else {
         rollbackTransaction();
-        $err_message = _MD_GWLOTO_MOVE_SEL_ERR .' '.$dbmsg;
+        $err_message = _MD_GWLOTO_MOVE_SEL_ERR . ' ' . $dbmsg;
     }
     return !$dberr;
 }
@@ -598,7 +592,7 @@ function movePlace($pid, $parent_pid, $uid)
 if (isset($_POST['op_cancel'])) {
     setClipboard($myuserid);
     $xoopsTpl->clear_assign('cbform');
-    $message=_MD_GWLOTO_CANCEL_SEL_OK;
+    $message = _MD_GWLOTO_CANCEL_SEL_OK;
     if (isset($currentplan)) {
         redirect_header("viewplan.php?cpid=$currentplan", 3, $message);
     }
@@ -616,75 +610,75 @@ if (!(isset($places['alluserauth'][_GWLOTO_USERAUTH_CP_EDIT]) || isset($places['
 if (isset($_GET['ptid']) || isset($_POST['ptid'])) {
     $caption = _MD_GWLOTO_EDITPOINT_NAME;
     $selname = getCpointName($currentpoint, $language);
-    $idname='ptid';
-    $idvalue=$currentpoint;
+    $idname  = 'ptid';
+    $idvalue = $currentpoint;
 } elseif (isset($_GET['cpid']) || isset($_POST['cpid'])) {
     $caption = _MD_GWLOTO_EDITPLAN_NAME;
     $selname = getCplanName($currentplan, $language);
-    $idname='cpid';
-    $idvalue=$currentplan;
+    $idname  = 'cpid';
+    $idvalue = $currentplan;
 } elseif (isset($_GET['mid']) || isset($_POST['mid'])) {
     $caption = _MD_GWLOTO_MEDIA_NAME;
     $selname = getMediaName($currentmedia, $language);
-    $idname='mid';
-    $idvalue=$currentmedia;
+    $idname  = 'mid';
+    $idvalue = $currentmedia;
 } elseif (isset($_GET['pid']) || isset($_POST['pid'])) {
     $caption = _MD_GWLOTO_EDITPLACE_NAME;
     $selname = getPlaceName($currentplace, $language);
-    $idname='pid';
-    $idvalue=$currentplace;
+    $idname  = 'pid';
+    $idvalue = $currentplace;
 }
 
 // get clipboard contents
-$clipid=0;
-$cliptype='';
+$clipid   = 0;
+$cliptype = '';
 unset($cb_ptid);
 unset($cb_cpid);
 unset($cb_pid);
 
 if (isset($_POST['op_copy']) || isset($_POST['op_move'])) {
     if (isset($places['userinfo']['clipboard_id'])) {
-        $clipid=intval($places['userinfo']['clipboard_id']);
+        $clipid = (int)$places['userinfo']['clipboard_id'];
     }
     if (isset($places['userinfo']['clipboard_type'])) {
-        $cliptype=$places['userinfo']['clipboard_type'];
+        $cliptype = $places['userinfo']['clipboard_type'];
     }
 
-    if ($clipid==0) {
-        $cliptype='';
+    if ($clipid == 0) {
+        $cliptype = '';
     }
 
     switch ($cliptype) {
         case 'POINT':
             $cb_ptid = $clipid;
-            $idname='ptid';
+            $idname  = 'ptid';
             break;
         case 'PLAN':
             $cb_cpid = $clipid;
-            $idname='cpid';
+            $idname  = 'cpid';
             break;
         case 'PLACE':
             $cb_pid = $clipid;
-            $idname='pid';
+            $idname = 'pid';
             break;
     }
 }
 
-$op='display';
+$op = 'display';
 
 if (isset($_POST['op_delete'])) {
     switch ($idname) {
         case 'pid':
-            $op='del_place';
+            $op = 'del_place';
             break;
         case 'cpid':
-            $op='del_plan';
+            $op = 'del_plan';
             break;
         case 'ptid':
-            $op='del_point';
+            $op = 'del_point';
             break;
         case 'mid':
-            $op='del_media';
+            $op = 'del_media';
             break;
     }
 }
@@ -692,13 +686,13 @@ if (isset($_POST['op_delete'])) {
 if (isset($_POST['op_movecopy'])) {
     switch ($idname) {
         case 'pid':
-            $op='cb_place';
+            $op = 'cb_place';
             break;
         case 'cpid':
-            $op='cb_plan';
+            $op = 'cb_plan';
             break;
         case 'ptid':
-            $op='cb_point';
+            $op = 'cb_point';
             break;
     }
 }
@@ -706,13 +700,13 @@ if (isset($_POST['op_movecopy'])) {
 if (isset($_POST['op_move'])) {
     switch ($idname) {
         case 'pid':
-            $op='mv_place';
+            $op = 'mv_place';
             break;
         case 'cpid':
-            $op='mv_plan';
+            $op = 'mv_plan';
             break;
         case 'ptid':
-            $op='mv_point';
+            $op = 'mv_point';
             break;
     }
 }
@@ -720,22 +714,22 @@ if (isset($_POST['op_move'])) {
 if (isset($_POST['op_copy'])) {
     switch ($idname) {
         case 'pid':
-            $op='cp_place';
+            $op = 'cp_place';
             break;
         case 'cpid':
-            $op='cp_plan';
+            $op = 'cp_plan';
             break;
         case 'ptid':
-            $op='cp_point';
+            $op = 'cp_point';
             break;
     }
 }
 
-if ($op!='display') {
-    $check=$GLOBALS['xoopsSecurity']->check();
+if ($op !== 'display') {
+    $check = $GLOBALS['xoopsSecurity']->check();
 
     if (!$check) {
-        $op='display';
+        $op          = 'display';
         $err_message = _MD_GWLOTO_MSG_BAD_TOKEN;
     }
 }
@@ -747,7 +741,7 @@ switch ($op) {
             redirect_header('index.php', 3, _MD_GWLOTO_MSG_NO_AUTHORITY);
         }
         if (deletePoint($currentpoint)) {
-            $message=_MD_GWLOTO_DELETE_SEL_OK;
+            $message = _MD_GWLOTO_DELETE_SEL_OK;
             redirect_header("editplan.php?cpid=$currentplan", 3, $message);
         }
         break;
@@ -756,7 +750,7 @@ switch ($op) {
             redirect_header('index.php', 3, _MD_GWLOTO_MSG_NO_AUTHORITY);
         }
         if (deletePlan($currentplan)) {
-            $message=_MD_GWLOTO_DELETE_SEL_OK;
+            $message = _MD_GWLOTO_DELETE_SEL_OK;
             redirect_header("index.php?pid=$currentplace", 3, $message);
         }
         break;
@@ -764,34 +758,34 @@ switch ($op) {
         if (!isset($places['currentauth'][_GWLOTO_USERAUTH_PL_EDIT])) {
             redirect_header('index.php', 3, _MD_GWLOTO_MSG_NO_AUTHORITY);
         }
-        $redirplace=getParentPlace($currentplace);
+        $redirplace = getParentPlace($currentplace);
         if (deletePlace($currentplace)) {
-            $message=_MD_GWLOTO_DELETE_SEL_OK;
+            $message = _MD_GWLOTO_DELETE_SEL_OK;
             redirect_header("index.php?pid=$redirplace", 3, $message);
         }
         break;
     // set clipboard operations
     case 'cb_place':
         setClipboard($myuserid, 'PLACE', $currentplace);
-        $message=_MD_GWLOTO_MOVECOPY_SEL_OK;
+        $message = _MD_GWLOTO_MOVECOPY_SEL_OK;
         redirect_header("index.php?pid=$currentplace", 3, $message);
         break;
     case 'cb_plan':
         setClipboard($myuserid, 'PLAN', $currentplan);
-        $message=_MD_GWLOTO_MOVECOPY_SEL_OK;
+        $message = _MD_GWLOTO_MOVECOPY_SEL_OK;
         redirect_header("index.php?pid=$currentplace", 3, $message);
         break;
     case 'cb_point':
         setClipboard($myuserid, 'POINT', $currentpoint);
-        $message=_MD_GWLOTO_MOVECOPY_SEL_OK;
+        $message = _MD_GWLOTO_MOVECOPY_SEL_OK;
         redirect_header("viewplan.php?cpid=$currentplan", 3, $message);
         break;
     // move operations
     case 'mv_point':
         // check auth on move source
-        $check_pid=getPlaceFromCplan(getCplanFromPoint($cb_ptid));
-        $dummy=false;
-        $targetauths=array();
+        $check_pid   = getPlaceFromCplan(getCplanFromPoint($cb_ptid));
+        $dummy       = false;
+        $targetauths = array();
         buildPlaceChain($myuserid, $check_pid, $targetauths, $dummy, $dummy, $dummy);
         if (!isset($targetauths[_GWLOTO_USERAUTH_CP_EDIT])) {
             redirect_header('index.php', 3, _MD_GWLOTO_MSG_NO_AUTHORITY);
@@ -805,15 +799,15 @@ switch ($op) {
         }
         if (movePoint($currentplan, $cb_ptid, $myuserid)) {
             setClipboard($myuserid);
-            $message=_MD_GWLOTO_MOVE_SEL_OK;
+            $message = _MD_GWLOTO_MOVE_SEL_OK;
             redirect_header("editplan.php?cpid=$currentplan", 3, $message);
         }
         break;
     case 'mv_plan':
         // check auth on move source
-        $check_pid=getPlaceFromCplan($cb_cpid);
-        $dummy=false;
-        $targetauths=array();
+        $check_pid   = getPlaceFromCplan($cb_cpid);
+        $dummy       = false;
+        $targetauths = array();
         buildPlaceChain($myuserid, $check_pid, $targetauths, $dummy, $dummy, $dummy);
         if (!isset($targetauths[_GWLOTO_USERAUTH_CP_EDIT])) {
             redirect_header('index.php', 3, _MD_GWLOTO_MSG_NO_AUTHORITY);
@@ -827,14 +821,14 @@ switch ($op) {
         }
         if (movePlan($currentplace, $cb_cpid, $myuserid)) {
             setClipboard($myuserid);
-            $message=_MD_GWLOTO_MOVE_SEL_OK;
+            $message = _MD_GWLOTO_MOVE_SEL_OK;
             redirect_header("editplan.php?cpid=$cb_cpid", 3, $message);
         }
         break;
     case 'mv_place':
         // check auth on move source
-        $dummy=false;
-        $targetauths=array();
+        $dummy       = false;
+        $targetauths = array();
         buildPlaceChain($myuserid, $cb_pid, $targetauths, $dummy, $dummy, $dummy);
         if (!isset($targetauths[_GWLOTO_USERAUTH_PL_EDIT])) {
             redirect_header('index.php', 3, _MD_GWLOTO_MSG_NO_AUTHORITY);
@@ -851,7 +845,7 @@ switch ($op) {
         }
         if (movePlace($cb_pid, $currentplace, $myuserid)) {
             setClipboard($myuserid);
-            $message=_MD_GWLOTO_MOVE_SEL_OK;
+            $message = _MD_GWLOTO_MOVE_SEL_OK;
             redirect_header("index.php?pid=$cb_pid", 3, $message);
         }
         break;
@@ -863,9 +857,9 @@ switch ($op) {
         if (!isset($currentplan) || !isset($cb_ptid)) {
             redirect_header('index.php', 3, _MD_GWLOTO_MSG_BAD_PARMS);
         }
-        if ($newpoint=copyPoint($currentplan, $cb_ptid, $myuserid)) {
+        if ($newpoint = copyPoint($currentplan, $cb_ptid, $myuserid)) {
             setClipboard($myuserid);
-            $message=_MD_GWLOTO_COPY_SEL_OK;
+            $message = _MD_GWLOTO_COPY_SEL_OK;
             redirect_header("editpoint.php?ptid=$newpoint", 3, $message);
         }
         break;
@@ -876,9 +870,9 @@ switch ($op) {
         if (!isset($currentplace) || !isset($cb_cpid)) {
             redirect_header('index.php', 3, _MD_GWLOTO_MSG_BAD_PARMS);
         }
-        if ($newplan=copyPlan($currentplace, $cb_cpid, $myuserid)) {
+        if ($newplan = copyPlan($currentplace, $cb_cpid, $myuserid)) {
             setClipboard($myuserid);
-            $message=_MD_GWLOTO_COPY_SEL_OK;
+            $message = _MD_GWLOTO_COPY_SEL_OK;
             redirect_header("editplan.php?cpid=$newplan", 3, $message);
         }
         break;
@@ -886,37 +880,37 @@ switch ($op) {
     case 'display':
         break;
     default:
-        $err_message="$op not yet implemented";
+        $err_message = "$op not yet implemented";
         break;
 }
 
-    $token=true;
+$token = true;
 
-    $form = new XoopsThemeForm(_MD_GWLOTO_CHOOSE_SELECTED, 'form1', 'select.php', 'POST', $token);
+$form = new XoopsThemeForm(_MD_GWLOTO_CHOOSE_SELECTED, 'form1', 'select.php', 'POST', $token);
 
 //  $caption = _MD_GWLOTO_EDITPLAN_NAME;
-    $form->addElement(new XoopsFormLabel($caption, $selname, 'sel_name'), false);
+$form->addElement(new XoopsFormLabel($caption, $selname, 'sel_name'), false);
 
-    $show_delete=false;
-    $show_movecopy=false;
-    switch ($idname) {
-        case 'pid':
-            $show_delete=isset($places['currentauth'][_GWLOTO_USERAUTH_PL_EDIT]);
-            $show_movecopy=isset($places['alluserauth'][_GWLOTO_USERAUTH_PL_EDIT]);
-            break;
-        case 'cpid':
-        case 'ptid':
-            $show_delete=isset($places['currentauth'][_GWLOTO_USERAUTH_CP_EDIT]);
-            $show_movecopy=isset($places['alluserauth'][_GWLOTO_USERAUTH_CP_EDIT]);
-            break;
-    }
+$show_delete   = false;
+$show_movecopy = false;
+switch ($idname) {
+    case 'pid':
+        $show_delete   = isset($places['currentauth'][_GWLOTO_USERAUTH_PL_EDIT]);
+        $show_movecopy = isset($places['alluserauth'][_GWLOTO_USERAUTH_PL_EDIT]);
+        break;
+    case 'cpid':
+    case 'ptid':
+        $show_delete   = isset($places['currentauth'][_GWLOTO_USERAUTH_CP_EDIT]);
+        $show_movecopy = isset($places['alluserauth'][_GWLOTO_USERAUTH_CP_EDIT]);
+        break;
+}
 
 // XoopsFormLabel( [string $caption = ""], [string $value = ""], [ $name = ""])
-    $form->addElement(new XoopsFormHidden($idname, $idvalue));
+$form->addElement(new XoopsFormHidden($idname, $idvalue));
 
 if ($show_delete) {
-    $button= new XoopsFormButton(_MD_GWLOTO_DELETE_SELECTED, 'op_delete', _MD_GWLOTO_DELETE_SEL_BUTTON, 'submit');
-    $button->setExtra('onClick="return confirm(\''._MD_GWLOTO_DELETE_SEL_CONFIRM.'\')"');
+    $button = new XoopsFormButton(_MD_GWLOTO_DELETE_SELECTED, 'op_delete', _MD_GWLOTO_DELETE_SEL_BUTTON, 'submit');
+    $button->setExtra('onClick="return confirm(\'' . _MD_GWLOTO_DELETE_SEL_CONFIRM . '\')"');
     $form->addElement($button);
 }
 
@@ -924,7 +918,7 @@ if ($show_movecopy) {
     $form->addElement(new XoopsFormButton(_MD_GWLOTO_MOVECOPY_SELECTED, 'op_movecopy', _MD_GWLOTO_MOVECOPY_SEL_BUTTON, 'submit'));
 }
 
-    $body=$form->render();
+$body = $form->render();
 
 //$debug="op=$op <br />";
 //$debug.='<pre>$_POST='.print_r($_POST,true).'</pre>';
@@ -953,4 +947,4 @@ if (isset($debug)) {
     $xoopsTpl->assign('debug', $debug);
 }
 
-include(XOOPS_ROOT_PATH.'/footer.php');
+include XOOPS_ROOT_PATH . '/footer.php';

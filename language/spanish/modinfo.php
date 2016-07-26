@@ -1,7 +1,6 @@
 <?php
-if (!defined('XOOPS_ROOT_PATH')) {
-    die('Root path not defined');
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
 // Module Info
 
 // The name and description of module
@@ -54,7 +53,6 @@ define('_MI_GWLOTO_AD_PLUGINS_LISTEMPTY', 'No se han encontrado plugins');
 define('_MI_GWLOTO_AD_PLUGINS_DEL_CONFIRM', 'Desinstalar este plugin?');
 define('_MI_GWLOTO_AD_PLUGINS_INVALID', 'No se pudo cargar el archivo como plugin.');
 
-
 // Admin Languages
 define('_MI_GWLOTO_AD_LANG_FORMNAME', 'Añadir un idioma');
 define('_MI_GWLOTO_AD_LANG_ID', 'Idioma ID');
@@ -80,12 +78,13 @@ define('_MI_GWLOTO_AD_TODO_ACTION', 'Acción');
 define('_MI_GWLOTO_AD_TODO_MESSAGE', 'Mensaje');
 define('_MI_GWLOTO_AD_TODO_PLACES', 'Debe agregar al menos un lugar de primer nivel.');
 define('_MI_GWLOTO_AD_TODO_MYSQL', 'versión de MySQL %1$s o superior se requiere. (Detectado=%2$s)');
-define('_MI_GWLOTO_AD_TODO_UPGRADE', 'Una versión más reciente de '._MI_GWLOTO_NAME.' está disponible (La versión instalada es %1$s, la versión actual es %2$s)');
+define('_MI_GWLOTO_AD_TODO_UPGRADE', 'Una versión más reciente de ' . _MI_GWLOTO_NAME . ' está disponible (La versión instalada es %1$s, la versión actual es %2$s)');
 define('_MI_GWLOTO_AD_TODO_UPLOAD', 'La subida ruta %1$s no se puede escribir. Compruebe que existe y los permisos son correctos.');
 define('_MI_GWLOTO_AD_TODO_TCPDF_NOTFND', 'TCPDF no se encontró en el lugar especificado en las preferencias del módulo. Por favor, corrija la configuración de las preferencias.');
 define('_MI_GWLOTO_AD_TODO_TCPDF_INSTALL', 'TCPDF no fue encontrada. Si se instala y no se detecta automáticamente, por favor, especifique la ubicación en las preferencias del módulo.');
 define('_MI_GWLOTO_AD_TODO_TCPDF_UPGRADE', 'La versión TCPDF localizado puede quedar obsoleta, y puede resultar en problemas visibles en la salida de algunos plugins. Considere la instalación de la versión actual de los mejores resultados.');
-define('_MI_GWLOTO_AD_TODO_TCPDF_GENERAL', '<br /><br />TCPDF es una clase PHP para generar documentos PDF y se requiere para la mayoría de plug-ins se incluyen para operar. Para obtener más información sobre TCPDF consulte  <a href="http://wwww.tcpdf.org/">www.tcpdf.org</a>.<br /><br />TCPDF se detecta automáticamente si está instalado en el directorio que se muestra aquí:<br />%s');
+define('_MI_GWLOTO_AD_TODO_TCPDF_GENERAL',
+       '<br /><br />TCPDF es una clase PHP para generar documentos PDF y se requiere para la mayoría de plug-ins se incluyen para operar. Para obtener más información sobre TCPDF consulte  <a href="http://wwww.tcpdf.org/">www.tcpdf.org</a>.<br /><br />TCPDF se detecta automáticamente si está instalado en el directorio que se muestra aquí:<br />%s');
 
 define('_MI_GWLOTO_AD_TODO_RETRY', 'Inténtelo de nuevo');
 define('_MI_GWLOTO_AD_TODO_FIX', 'Trate de arreglar');
@@ -95,8 +94,8 @@ define('_MI_GWLOTO_AD_TODO_FIX_FAILED', 'No se pudo arreglar');
 define('_MI_GWLOTO_CFG_MAXTAG', 'Número máximo de copias de etiquetas');
 define('_MI_GWLOTO_CFG_MAXTAG_DSC', 'Número máximo de copias de etiquetas y bloqueos necesarios');
 
-define('_MI_GWLOTO_CFG_PREF_DATE', "Formato de fecha");
-define('_MI_GWLOTO_CFG_PREF_DATE_DSC', "Formato pasa a formatTimeStamp ()");
+define('_MI_GWLOTO_CFG_PREF_DATE', 'Formato de fecha');
+define('_MI_GWLOTO_CFG_PREF_DATE_DSC', 'Formato pasa a formatTimeStamp ()');
 
 define('_MI_GWLOTO_CFG_SHOW_RECON', 'Vuelva a conectar el uso fase');
 define('_MI_GWLOTO_CFG_SHOW_RECON_DSC', 'Mostrar vuelva a conectar las instrucciones y secuencias');
@@ -107,7 +106,8 @@ define('_MI_GWLOTO_CFG_JOB_REQUIRES', 'Los campos obligatorios en las entradas d
 define('_MI_GWLOTO_CFG_JOB_REQUIRES_DSC', "Lista separada por comas de los campos necesarios para Nuevo trabajo, Editar Trabajo y añadiendo el paso. Los valores posibles son: 'workorder', 'supervisor', 'startdate', 'enddate', 'description' and 'stepname'");
 
 define('_MI_GWLOTO_CFG_PLAN_REQUIRES', 'Los campos obligatorios en el Plan de Control de las entradas');
-define('_MI_GWLOTO_CFG_PLAN_REQUIRES_DSC', "Lista separada por comas de los campos necesarios para el Plan de Control de las entradas y puntos de control. Los valores posibles son: 'review', 'hazard_inventory', 'required_ppe', 'authorized_personnel', 'additional_requirements', 'disconnect_instructions', 'reconnect_instructions', 'inspection_instructions' and 'inspection_state'");
+define('_MI_GWLOTO_CFG_PLAN_REQUIRES_DSC',
+       "Lista separada por comas de los campos necesarios para el Plan de Control de las entradas y puntos de control. Los valores posibles son: 'review', 'hazard_inventory', 'required_ppe', 'authorized_personnel', 'additional_requirements', 'disconnect_instructions', 'reconnect_instructions', 'inspection_instructions' and 'inspection_state'");
 
 define('_MI_GWLOTO_CFG_MEDIA_PATH', 'Ruta de acceso a las cargas de archivos multimedia');
 define('_MI_GWLOTO_CFG_MEDIA_PATH_DSC', 'Directorio donde los archivos multimedia se colocan cuando subido al servidor. Debe tener permisos de escritura por el servidor web.');

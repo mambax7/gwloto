@@ -21,14 +21,16 @@
     padding-bottom: 1px;
 }
 
-#op_move, #op_copy, #op_cancel, #op_addstep
-{
-    font-size: 0.7em; font-weight: normal; text-decoration: none;
+#op_move, #op_copy, #op_cancel, #op_addstep {
+    font-size: 0.7em;
+    font-weight: normal;
+    text-decoration: none;
     padding: 1px;
 }
 
 .joblist {
-    border: 1px solid #999; width: 100%;
+    border: 1px solid #999;
+    width: 100%;
 }
 
 .joblist a {
@@ -36,6 +38,7 @@
     text-decoration: none;
     font-weight: bold;
 }
+
 .joblist a:hover {
     color: #111;
     text-decoration: underline;
@@ -44,12 +47,14 @@
 table.joblist tr.odd td {
     background-color: #f9fae6;
 }
+
 table.joblist tr.even td {
     background-color: #feffe8;
 }
 
-div.pagination.default{
-    width: 100%; text-align: right;
+div.pagination.default {
+    width: 100%;
+    text-align: right;
 }
 
 div.gBranding {
@@ -63,5 +68,6 @@ div.gBranding {
 }
 
 .medialist {
-    border: 1px solid #999; width: 100%;
+    border: 1px solid #999;
+    width: 100%;
 }

@@ -1,30 +1,28 @@
 <?php
 /**
-* editplace.php - edit place detail and translations
-*
-* This file is part of gwloto - geekwright lockout tagout
-*
-* @copyright  Copyright © 2010 geekwright, LLC. All rights reserved.
-* @license    gwloto/docs/license.txt  GNU General Public License (GPL)
-* @since      1.0
-* @author     Richard Griffith <richard@geekwright.com>
-* @package    gwloto
-* @version    $Id$
-*/
+ * editplace.php - edit place detail and translations
+ *
+ * This file is part of gwloto - geekwright lockout tagout
+ *
+ * @copyright  Copyright © 2010 geekwright, LLC. All rights reserved.
+ * @license    gwloto/docs/license.txt  GNU General Public License (GPL)
+ * @author     Richard Griffith <richard@geekwright.com>
+ * @package    gwloto
+ */
 
-include '../../mainfile.php';
+include __DIR__ . '/../../mainfile.php';
 $GLOBALS['xoopsOption']['template_main'] = 'gwloto_index.html';
-include(XOOPS_ROOT_PATH.'/header.php');
-$currentscript=basename(__FILE__) ;
-include_once XOOPS_ROOT_PATH.'/class/xoopsformloader.php';
-include('include/userauth.php');
-include('include/userauthlist.php');
-include('include/common.php');
-include('include/placeenv.php');
-include('include/actionmenu.php');
+include XOOPS_ROOT_PATH . '/header.php';
+$currentscript = basename(__FILE__);
+include_once XOOPS_ROOT_PATH . '/class/xoopsformloader.php';
+include __DIR__ . '/include/userauth.php';
+include __DIR__ . '/include/userauthlist.php';
+include __DIR__ . '/include/common.php';
+include __DIR__ . '/include/placeenv.php';
+include __DIR__ . '/include/actionmenu.php';
 
 if (!isset($currentplace) && !isset($places['choose'])) {
-    if ($myuserid==0) {
+    if ($myuserid == 0) {
         $err_message = _MD_GWLOTO_MSG_ANON_ACCESS;
     } else {
         $err_message = _MD_GWLOTO_MSG_NO_ACCESS;
@@ -36,16 +34,16 @@ if (!isset($places['currentauth'][_GWLOTO_USERAUTH_PL_EDIT]) && !isset($places['
     redirect_header('index.php', 3, _MD_GWLOTO_MSG_NO_AUTHORITY);
 }
 
-$op='display';
+$op = 'display';
 if (isset($_POST['submit'])) {
     if (isset($places['currentauth'][_GWLOTO_USERAUTH_PL_EDIT])) {
-        $op='update';
+        $op = 'update';
     } else {
         if (isset($places['currentauth'][_GWLOTO_USERAUTH_PL_TRANS])) {
-            if ($language==0) {
+            if ($language == 0) {
                 $err_message = _MD_GWLOTO_MSG_NO_TRANSLATE_DEFAULT;
             } else {
-                $op='update';
+                $op = 'update';
             }
         }
     }
@@ -53,36 +51,35 @@ if (isset($_POST['submit'])) {
 // translator functionality
 if (isset($places['currentauth'][_GWLOTO_USERAUTH_PL_TRANS])) {
     if (isset($_POST['lchange'])) {
-        $op='lchange';
+        $op = 'lchange';
     }
 }
 
-$place_name='';
-$place_hazard_inventory='';
-$place_required_ppe='';
+$place_name             = '';
+$place_hazard_inventory = '';
+$place_required_ppe     = '';
 
 // get data from table
 
-    $sql='SELECT language_id, place_name, place_hazard_inventory, place_required_ppe FROM '.$xoopsDB->prefix('gwloto_place_detail');
-    $sql.=" WHERE place = $currentplace and (language_id=$language OR language_id=0)";
-    $sql.=' ORDER BY language_id ';
+$sql = 'SELECT language_id, place_name, place_hazard_inventory, place_required_ppe FROM ' . $xoopsDB->prefix('gwloto_place_detail');
+$sql .= " WHERE place = $currentplace and (language_id=$language OR language_id=0)";
+$sql .= ' ORDER BY language_id ';
 
-    $cnt=0;
-    $result = $xoopsDB->query($sql);
-    if ($result) {
-        while ($myrow=$xoopsDB->fetchArray($result)) {
-            $displayed_lid=$myrow['language_id'];
-            $place_name=$myrow['place_name'];
-            $place_hazard_inventory = $myrow['place_hazard_inventory'];
-            $place_required_ppe = $myrow['place_required_ppe'];
-        }
-    } else {
-        redirect_header('index.php', 3, _MD_GWLOTO_EDITPLACE_NOTFOUND);
+$cnt    = 0;
+$result = $xoopsDB->query($sql);
+if ($result) {
+    while ($myrow = $xoopsDB->fetchArray($result)) {
+        $displayed_lid          = $myrow['language_id'];
+        $place_name             = $myrow['place_name'];
+        $place_hazard_inventory = $myrow['place_hazard_inventory'];
+        $place_required_ppe     = $myrow['place_required_ppe'];
     }
-
+} else {
+    redirect_header('index.php', 3, _MD_GWLOTO_EDITPLACE_NOTFOUND);
+}
 
 // if form was submitted, and not a language change request, use form values instead.
-if ($op!='lchange') {
+if ($op !== 'lchange') {
     if (isset($_POST['place_name'])) {
         $place_name = cleaner($_POST['place_name']);
     }
@@ -94,35 +91,35 @@ if ($op!='lchange') {
     }
 }
 
-if ($op!='display') {
-    $check=$GLOBALS['xoopsSecurity']->check();
+if ($op !== 'display') {
+    $check = $GLOBALS['xoopsSecurity']->check();
 
     if (!$check) {
-        $op='display';
+        $op          = 'display';
         $err_message = _MD_GWLOTO_MSG_BAD_TOKEN;
     }
 }
 
-if ($op=='update') {
-    $sl_place_name=dbescape($place_name);
-    $sl_place_hazard_inventory=dbescape($place_hazard_inventory);
-    $sl_place_required_ppe=dbescape($place_required_ppe);
+if ($op === 'update') {
+    $sl_place_name             = dbescape($place_name);
+    $sl_place_hazard_inventory = dbescape($place_hazard_inventory);
+    $sl_place_required_ppe     = dbescape($place_required_ppe);
 
-    $sql ="UPDATE ".$xoopsDB->prefix('gwloto_place_detail');
-    $sql.=" SET place_name = '$sl_place_name'";
-    $sql.=" , place_hazard_inventory = '$sl_place_hazard_inventory' ";
-    $sql.=" , place_required_ppe = '$sl_place_required_ppe' ";
-    $sql.=" , last_changed_by = $myuserid ";
-    $sql.=" , last_changed_on = UNIX_TIMESTAMP() ";
-    $sql.=" WHERE place = $currentplace and language_id=$language ";
+    $sql = 'UPDATE ' . $xoopsDB->prefix('gwloto_place_detail');
+    $sql .= " SET place_name = '$sl_place_name'";
+    $sql .= " , place_hazard_inventory = '$sl_place_hazard_inventory' ";
+    $sql .= " , place_required_ppe = '$sl_place_required_ppe' ";
+    $sql .= " , last_changed_by = $myuserid ";
+    $sql .= ' , last_changed_on = UNIX_TIMESTAMP() ';
+    $sql .= " WHERE place = $currentplace and language_id=$language ";
 
     $result = $xoopsDB->queryF($sql);
     if ($result) {
-        $rcnt=$xoopsDB->getAffectedRows();
-        if ($rcnt==0 && ($displayed_lid!=$language && isset($places['currentauth'][_GWLOTO_USERAUTH_PL_TRANS]))) {
-            $sql ="INSERT INTO ".$xoopsDB->prefix('gwloto_place_detail');
-            $sql.=" (place, language_id, place_name, place_hazard_inventory, place_required_ppe, last_changed_by, last_changed_on)";
-            $sql.=" VALUES ($currentplace, $language, '$sl_place_name', '$sl_place_hazard_inventory', '$sl_place_required_ppe', $myuserid, UNIX_TIMESTAMP() )";
+        $rcnt = $xoopsDB->getAffectedRows();
+        if ($rcnt == 0 && ($displayed_lid != $language && isset($places['currentauth'][_GWLOTO_USERAUTH_PL_TRANS]))) {
+            $sql = 'INSERT INTO ' . $xoopsDB->prefix('gwloto_place_detail');
+            $sql .= ' (place, language_id, place_name, place_hazard_inventory, place_required_ppe, last_changed_by, last_changed_on)';
+            $sql .= " VALUES ($currentplace, $language, '$sl_place_name', '$sl_place_hazard_inventory', '$sl_place_required_ppe', $myuserid, UNIX_TIMESTAMP() )";
             $result = $xoopsDB->queryF($sql);
         }
     }
@@ -130,71 +127,71 @@ if ($op=='update') {
     if ($result) {
         $message = _MD_GWLOTO_EDITPLACE_UPDATE_OK;
     } else {
-        $err_message .= _MD_GWLOTO_EDITPLACE_DB_ERROR .' '.formatDBError();
+        $err_message .= _MD_GWLOTO_EDITPLACE_DB_ERROR . ' ' . formatDBError();
     }
 }
 
-    $token=true;
+$token = true;
 
-    $form = new XoopsThemeForm(_MD_GWLOTO_EDITPLACE_FORM, 'form1', 'editplace.php', 'POST', $token);
+$form = new XoopsThemeForm(_MD_GWLOTO_EDITPLACE_FORM, 'form1', 'editplace.php', 'POST', $token);
 
-    $caption = _MD_GWLOTO_EDITPLACE_NAME;
-    $form->addElement(new XoopsFormText($caption, 'place_name', 40, 250, htmlspecialchars($place_name, ENT_QUOTES)), true);
+$caption = _MD_GWLOTO_EDITPLACE_NAME;
+$form->addElement(new XoopsFormText($caption, 'place_name', 40, 250, htmlspecialchars($place_name, ENT_QUOTES)), true);
 
-    $caption = _MD_GWLOTO_EDITPLACE_HAZARDS;
-    $form->addElement(new XoopsFormTextArea($caption, 'place_hazard_inventory', $place_hazard_inventory, 15, 50, 'place_hazard_inventory'), false);
+$caption = _MD_GWLOTO_EDITPLACE_HAZARDS;
+$form->addElement(new XoopsFormTextArea($caption, 'place_hazard_inventory', $place_hazard_inventory, 15, 50, 'place_hazard_inventory'), false);
 
-    $caption = _MD_GWLOTO_EDITPLACE_PPE;
-    $form->addElement(new XoopsFormTextArea($caption, 'place_required_ppe', $place_required_ppe, 10, 50, 'place_required_ppe'), false);
+$caption = _MD_GWLOTO_EDITPLACE_PPE;
+$form->addElement(new XoopsFormTextArea($caption, 'place_required_ppe', $place_required_ppe, 10, 50, 'place_required_ppe'), false);
 
-    $form->addElement(new XoopsFormHidden('pid', $currentplace));
+$form->addElement(new XoopsFormHidden('pid', $currentplace));
 
-    $form->addElement(new XoopsFormButton(_MD_GWLOTO_EDITPLACE_UPDATE, 'submit', _MD_GWLOTO_EDITPLACE_UPDATE_BUTTON, 'submit'));
+$form->addElement(new XoopsFormButton(_MD_GWLOTO_EDITPLACE_UPDATE, 'submit', _MD_GWLOTO_EDITPLACE_UPDATE_BUTTON, 'submit'));
 
-    // translator functionality
-    if (isset($places['currentauth'][_GWLOTO_USERAUTH_PL_TRANS])) {
-        $available_languages=getLanguages();
+// translator functionality
+if (isset($places['currentauth'][_GWLOTO_USERAUTH_PL_TRANS])) {
+    $available_languages = getLanguages();
 
-        $caption = _MD_GWLOTO_LANG_TRAY;
+    $caption = _MD_GWLOTO_LANG_TRAY;
 
-        $langtray=new XoopsFormElementTray($caption, '');
+    $langtray = new XoopsFormElementTray($caption, '');
 
-        $listbox = new XoopsFormSelect('', 'lid', $language, 1, false);
-        foreach ($available_languages as $i => $v) {
-            $listbox->addOption($i, $v);
+    $listbox = new XoopsFormSelect('', 'lid', $language, 1, false);
+    foreach ($available_languages as $i => $v) {
+        $listbox->addOption($i, $v);
+    }
+    $langtray->addElement($listbox);
+
+    $langtray->addElement(new XoopsFormButton('', 'lchange', _MD_GWLOTO_LANG_CHANGE_BUTTON, 'submit'));
+
+    $googleTranslateEnabled = ($xoopsModuleConfig['enable_translate'] == 1);
+    $bingTranslateEnabled   = ($xoopsModuleConfig['enable_translate'] == 2);
+    $TranslateAPIKey        = $xoopsModuleConfig['translate_api_key'];
+
+    $langcodes = getLanguageCodes();
+    foreach ($langcodes as $i => $v) {
+        if ($v == '') {
+            $googleTranslateEnabled = false;
+            $bingTranslateEnabled   = false;
         }
-        $langtray->addElement($listbox);
+    }
 
-        $langtray->addElement(new XoopsFormButton('', 'lchange', _MD_GWLOTO_LANG_CHANGE_BUTTON, 'submit'));
+    if ($googleTranslateEnabled) {
+        if ($TranslateAPIKey == '') {
+            $key = '';
+        } else {
+            $key = 'key=' . $TranslateAPIKey;
+        }
+        $xoTheme->addScript('http://www.google.com/jsapi?' . $key);
 
-        $googleTranslateEnabled=($xoopsModuleConfig['enable_translate']==1);
-        $bingTranslateEnabled=($xoopsModuleConfig['enable_translate']==2);
-        $TranslateAPIKey=$xoopsModuleConfig['translate_api_key'];
-
-        $langcodes=getLanguageCodes();
+        $translate_js = '';
+        $langcodes    = getLanguageCodes();
+        $translate_js .= 'var langCodes=new Array();';
         foreach ($langcodes as $i => $v) {
-            if ($v=='') {
-                $googleTranslateEnabled=false;
-                $bingTranslateEnabled=false;
-            }
+            $translate_js .= "langCodes[$i]=\"$v\";";
         }
 
-        if ($googleTranslateEnabled) {
-            if ($TranslateAPIKey=='') {
-                $key='';
-            } else {
-                $key='key='.$TranslateAPIKey;
-            }
-            $xoTheme->addScript('http://www.google.com/jsapi?'.$key);
-
-            $translate_js = '';
-            $langcodes=getLanguageCodes();
-            $translate_js .= 'var langCodes=new Array();';
-            foreach ($langcodes as $i => $v) {
-                $translate_js .= "langCodes[$i]=\"$v\";";
-            }
-
-            $translate_js .= <<<ENDJSCODE
+        $translate_js .= <<<ENDJSCODE
 
 google.load("language", "1");
 google.setOnLoadCallback(googleinit);
@@ -246,30 +243,30 @@ function doTranslate(form) {
 }
 ENDJSCODE;
 
-            $xoTheme->addScript(null, array( 'type' => 'text/javascript' ), $translate_js);
+        $xoTheme->addScript(null, array('type' => 'text/javascript'), $translate_js);
 
-            $translate_button=new XoopsFormButton('', 'lchange', _MD_GWLOTO_LANG_TRANS_BUTTON, 'button');
-            $translate_button->setExtra(' onClick=\'doTranslate(this.form)\' ');
-            $langtray->addElement($translate_button);
-            $langtray->addElement(new XoopsFormLabel('', '<span id=\'googlebranding\'> </span>', 'branding'), false);
+        $translate_button = new XoopsFormButton('', 'lchange', _MD_GWLOTO_LANG_TRANS_BUTTON, 'button');
+        $translate_button->setExtra(' onClick=\'doTranslate(this.form)\' ');
+        $langtray->addElement($translate_button);
+        $langtray->addElement(new XoopsFormLabel('', '<span id=\'googlebranding\'> </span>', 'branding'), false);
+    }
+
+    // begin microsoft translate support
+    if ($bingTranslateEnabled) {
+        if ($TranslateAPIKey == '') {
+            $bingTranslateEnabled = false;
         }
-
-// begin microsoft translate support
-        if ($bingTranslateEnabled) {
-            if ($TranslateAPIKey=='') {
-                $bingTranslateEnabled=false;
-            }
+    }
+    if ($bingTranslateEnabled) {
+        $translate_js = '';
+        $langcodes    = getLanguageCodes();
+        $translate_js .= 'var langCodes=new Array();';
+        foreach ($langcodes as $i => $v) {
+            $translate_js .= "langCodes[$i]=\"$v\";";
         }
-        if ($bingTranslateEnabled) {
-            $translate_js = '';
-            $langcodes=getLanguageCodes();
-            $translate_js .= 'var langCodes=new Array();';
-            foreach ($langcodes as $i => $v) {
-                $translate_js .= "langCodes[$i]=\"$v\";";
-            }
-            $translate_js .= "appIdToken=\"$TranslateAPIKey\";";
+        $translate_js .= "appIdToken=\"$TranslateAPIKey\";";
 
-            $translate_js .= <<<ENDJSCODEB
+        $translate_js .= <<<ENDJSCODEB
 
 function prepInput(value) {
     var preped = value.replace(/\\n/g, "<br />");
@@ -332,24 +329,23 @@ function doTranslate(form) {
 }
 ENDJSCODEB;
 
-            $xoTheme->addScript(null, array( 'type' => 'text/javascript' ), $translate_js);
+        $xoTheme->addScript(null, array('type' => 'text/javascript'), $translate_js);
 
-            $translate_button=new XoopsFormButton('', 'lchange', _MD_GWLOTO_LANG_TRANS_BUTTON, 'button');
-            $translate_button->setExtra(' onClick=\'doTranslate(this.form)\' ');
-            $langtray->addElement($translate_button);
-        }
-
-// end microsoft translate support
-
-        $form->addElement($langtray);
+        $translate_button = new XoopsFormButton('', 'lchange', _MD_GWLOTO_LANG_TRANS_BUTTON, 'button');
+        $translate_button->setExtra(' onClick=\'doTranslate(this.form)\' ');
+        $langtray->addElement($translate_button);
     }
 
+    // end microsoft translate support
 
-    //$form->display();
-    $body=$form->render();
+    $form->addElement($langtray);
+}
 
-$canedit=isset($places['currentauth'][_GWLOTO_USERAUTH_PL_EDIT]);
-$media=getAttachedMedia('place', $currentplace, $language, $canedit);
+//$form->display();
+$body = $form->render();
+
+$canedit = isset($places['currentauth'][_GWLOTO_USERAUTH_PL_EDIT]);
+$media   = getAttachedMedia('place', $currentplace, $language, $canedit);
 
 //$debug="op=$op  language=$language displayed_lid=$displayed_lid <br />";
 //$debug.='<pre>$_POST='.print_r($_POST,true).'</pre>';
@@ -378,4 +374,4 @@ if (isset($debug)) {
     $xoopsTpl->assign('debug', $debug);
 }
 
-include(XOOPS_ROOT_PATH.'/footer.php');
+include XOOPS_ROOT_PATH . '/footer.php';

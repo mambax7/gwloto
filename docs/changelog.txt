@@ -1,5 +1,11 @@
 gwreports ChangeLog
 
+=== gwloto Module 1.2 Beta 1 ===
+Release date: NOT RELEASED
+- added _MD_GWLOTO_DELETE_SEL_ONLY_TOP_PLACE
+- XOOPS 2.5.8 & PHP 7
+
+
 === gwloto Module 1.1 RC ===
 Release date: 2013-05-01
 

@@ -1,17 +1,16 @@
 <?php
-if (!defined('XOOPS_ROOT_PATH')) {
-    die('Root path not defined');
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
 define('_MD_GWLOTO_TITLE', 'geekwright Lockout Tagout');
 define('_MD_GWLOTO_TITLE_SHORT', 'gwloto : '); // prepends to html page title
 
 define('_MD_GWLOTO_TITLE_INDEX', 'Place Browser');
 define('_MD_GWLOTO_TITLE_EDITAUTHS', 'Set User Authorities');
-define('_MD_GWLOTO_TITLE_SELECT',   'Clipboard Actions');
+define('_MD_GWLOTO_TITLE_SELECT', 'Clipboard Actions');
 
-define('_MD_GWLOTO_TITLE_NEWJOB',   'Start New Energy Control Job');
+define('_MD_GWLOTO_TITLE_NEWJOB', 'Start New Energy Control Job');
 define('_MD_GWLOTO_TITLE_PRINTJOB', 'Print Energy Control Job Documents');
-define('_MD_GWLOTO_TITLE_VIEWJOB',  'Energy Control Job Overview');
+define('_MD_GWLOTO_TITLE_VIEWJOB', 'Energy Control Job Overview');
 define('_MD_GWLOTO_TITLE_VIEWSTEP', 'Energy Control Job Step Detail');
 define('_MD_GWLOTO_TITLE_LISTJOBS', 'Search Energy Control Jobs');
 
@@ -20,7 +19,7 @@ define('_MD_GWLOTO_TITLE_NEWPLACE', 'Add a New Place');
 
 define('_MD_GWLOTO_TITLE_VIEWPLAN', 'View Energy Control Plan');
 define('_MD_GWLOTO_TITLE_EDITPLAN', 'Edit Energy Control Plan');
-define('_MD_GWLOTO_TITLE_NEWPLAN',  'Start New Energy Control Plan');
+define('_MD_GWLOTO_TITLE_NEWPLAN', 'Start New Energy Control Plan');
 
 define('_MD_GWLOTO_TITLE_VIEWPOINT', 'View Energy Control Point');
 define('_MD_GWLOTO_TITLE_EDITPOINT', 'Edit Energy Control Point');
@@ -65,7 +64,6 @@ define('_MD_GWLOTO_USERAUTH_RPT_AUTHS', 'Authority');
 define('_MD_GWLOTO_USERAUTH_RPT_NOAUTH', 'No Authorities');
 
 define('_MD_GWLOTO_USERAUTH_EXIT', 'Exit Authority Editor');
-
 
 define('_MD_GWLOTO_LASTCHG_BY', 'Last Updated By');
 define('_MD_GWLOTO_LASTCHG_ON', 'Last Update Time');
@@ -246,17 +244,17 @@ define('_MD_GWLOTO_JOB_PRINT_NODEFS', 'No print plugins are installed. Notify th
 // user authorities
 define('_MD_GWLOTO_USERAUTH_PL_ADMIN_DSC', 'Edit User Authorities');
 define('_MD_GWLOTO_USERAUTH_PL_AUDIT_DSC', 'View User Authorities');
-define('_MD_GWLOTO_USERAUTH_PL_EDIT_DSC',  'Add or Edit Places');
+define('_MD_GWLOTO_USERAUTH_PL_EDIT_DSC', 'Add or Edit Places');
 define('_MD_GWLOTO_USERAUTH_PL_SUPER_DSC', 'Supervisor of Place');
 
-define('_MD_GWLOTO_USERAUTH_CP_EDIT_DSC',  'Add or Edit Control Plans');
-define('_MD_GWLOTO_USERAUTH_CP_VIEW_DSC',  'View Control Plans');
+define('_MD_GWLOTO_USERAUTH_CP_EDIT_DSC', 'Add or Edit Control Plans');
+define('_MD_GWLOTO_USERAUTH_CP_VIEW_DSC', 'View Control Plans');
 
-define('_MD_GWLOTO_USERAUTH_JB_EDIT_DSC',  'Add or Edit Jobs');
-define('_MD_GWLOTO_USERAUTH_JB_VIEW_DSC',  'View Jobs');
+define('_MD_GWLOTO_USERAUTH_JB_EDIT_DSC', 'Add or Edit Jobs');
+define('_MD_GWLOTO_USERAUTH_JB_VIEW_DSC', 'View Jobs');
 
-define('_MD_GWLOTO_USERAUTH_MD_EDIT_DSC',  'Add or Edit Media');
-define('_MD_GWLOTO_USERAUTH_MD_VIEW_DSC',  'Browse Media');
+define('_MD_GWLOTO_USERAUTH_MD_EDIT_DSC', 'Add or Edit Media');
+define('_MD_GWLOTO_USERAUTH_MD_VIEW_DSC', 'Browse Media');
 
 define('_MD_GWLOTO_USERAUTH_PL_TRANS_DSC', 'Translate Places');
 define('_MD_GWLOTO_USERAUTH_CP_TRANS_DSC', 'Translate Control Plans');
@@ -431,3 +429,5 @@ define('_MD_GWLOTO_GROUPAUTH_DISPLAY', 'Show current authorities');
 define('_MD_GWLOTO_USERAUTH_BY_USER', 'Edit Users');
 define('_MD_GWLOTO_USERAUTH_BY_GROUP', 'Edit Groups');
 define('_MD_GWLOTO_USERAUTH_RPT_GROUP', 'Group');
+
+define('_MD_GWLOTO_DELETE_SEL_ONLY_TOP_PLACE', 'Can Not Delete Only Top Level Place');

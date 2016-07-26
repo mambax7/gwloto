@@ -1,8 +1,6 @@
 <?php
-// @version    $Id: admin.php 41 2013-04-03 20:15:51Z rgriffith $
-if (!defined("XOOPS_ROOT_PATH")) {
-    die("Root path not defined");
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
 // Admin constants
 // new in 1.1
 // about and menu strings

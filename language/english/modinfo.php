@@ -1,7 +1,6 @@
 <?php
-if (!defined('XOOPS_ROOT_PATH')) {
-    die('Root path not defined');
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
 // Module Info
 
 // The name and description of module
@@ -54,7 +53,6 @@ define('_MI_GWLOTO_AD_PLUGINS_LISTEMPTY', 'No plugins found');
 define('_MI_GWLOTO_AD_PLUGINS_DEL_CONFIRM', 'Uninstall this plugin?');
 define('_MI_GWLOTO_AD_PLUGINS_INVALID', 'Failed to load file as plugin.');
 
-
 // Admin Languages
 define('_MI_GWLOTO_AD_LANG_FORMNAME', 'Add a Language');
 define('_MI_GWLOTO_AD_LANG_ID', 'Language ID');
@@ -80,12 +78,13 @@ define('_MI_GWLOTO_AD_TODO_ACTION', 'Action');
 define('_MI_GWLOTO_AD_TODO_MESSAGE', 'Message');
 define('_MI_GWLOTO_AD_TODO_PLACES', 'You must add at least one top level place.');
 define('_MI_GWLOTO_AD_TODO_MYSQL', 'MySQL version %1$s or above is required. (Detected=%2$s)');
-define('_MI_GWLOTO_AD_TODO_UPGRADE', 'A newer version of '._MI_GWLOTO_NAME.' is available (Installed=%1$s Current=%2$s)');
+define('_MI_GWLOTO_AD_TODO_UPGRADE', 'A newer version of ' . _MI_GWLOTO_NAME . ' is available (Installed=%1$s Current=%2$s)');
 define('_MI_GWLOTO_AD_TODO_UPLOAD', 'The upload path %1$s is not writable. Check that it exists and permissions are correct.');
 define('_MI_GWLOTO_AD_TODO_TCPDF_NOTFND', 'TCPDF was not found in the location specified in the module preferences. Please correct the preferences setting.');
 define('_MI_GWLOTO_AD_TODO_TCPDF_INSTALL', 'TCPDF was not found. If it is installed and was not auto-detected, please specify the location in the module preferences.');
 define('_MI_GWLOTO_AD_TODO_TCPDF_UPGRADE', 'The TCPDF version located may be outdated, and may result in visible issues in the output of some plugins. Consider installing the current version for the best results.');
-define('_MI_GWLOTO_AD_TODO_TCPDF_GENERAL', '<br /><br />TCPDF is a PHP class for generating PDF documents, and is is required for most supplied plugins to operate. For more information on TCPDF please see <a href="http://wwww.tcpdf.org/">www.tcpdf.org</a>.<br /><br />TCPDF will be automatically detected if installed in the  directory shown here:<br />%s');
+define('_MI_GWLOTO_AD_TODO_TCPDF_GENERAL',
+       '<br /><br />TCPDF is a PHP class for generating PDF documents, and is is required for most supplied plugins to operate. For more information on TCPDF please see <a href="http://wwww.tcpdf.org/">www.tcpdf.org</a>.<br /><br />TCPDF will be automatically detected if installed in the  directory shown here:<br />%s');
 
 define('_MI_GWLOTO_AD_TODO_RETRY', 'Retry');
 define('_MI_GWLOTO_AD_TODO_FIX', 'Try to Fix');
@@ -95,8 +94,8 @@ define('_MI_GWLOTO_AD_TODO_FIX_FAILED', 'Could not fix');
 define('_MI_GWLOTO_CFG_MAXTAG', 'Max Tag Copies');
 define('_MI_GWLOTO_CFG_MAXTAG_DSC', 'Maximum number of Tag Copies and Locks Required');
 
-define('_MI_GWLOTO_CFG_PREF_DATE', "Date Format");
-define('_MI_GWLOTO_CFG_PREF_DATE_DSC', "Format passed to formatTimeStamp()");
+define('_MI_GWLOTO_CFG_PREF_DATE', 'Date Format');
+define('_MI_GWLOTO_CFG_PREF_DATE_DSC', 'Format passed to formatTimeStamp()');
 
 define('_MI_GWLOTO_CFG_SHOW_RECON', 'Use Reconnect');
 define('_MI_GWLOTO_CFG_SHOW_RECON_DSC', 'Show Reconnect instructions and sequences');
@@ -107,7 +106,8 @@ define('_MI_GWLOTO_CFG_JOB_REQUIRES', 'Fields Required on Job Entries');
 define('_MI_GWLOTO_CFG_JOB_REQUIRES_DSC', "Comma separated list of fields required for New Job, Edit Job and Add Step entries. Possible values are: 'workorder', 'supervisor', 'startdate', 'enddate', 'description' and 'stepname'");
 
 define('_MI_GWLOTO_CFG_PLAN_REQUIRES', 'Fields Required on Control Plan Entries');
-define('_MI_GWLOTO_CFG_PLAN_REQUIRES_DSC', "Comma separated list of fields required for Control Plan and Control Points entries. Possible values are: 'review', 'hazard_inventory', 'required_ppe', 'authorized_personnel', 'additional_requirements', 'disconnect_instructions', 'reconnect_instructions', 'inspection_instructions' and 'inspection_state'");
+define('_MI_GWLOTO_CFG_PLAN_REQUIRES_DSC',
+       "Comma separated list of fields required for Control Plan and Control Points entries. Possible values are: 'review', 'hazard_inventory', 'required_ppe', 'authorized_personnel', 'additional_requirements', 'disconnect_instructions', 'reconnect_instructions', 'inspection_instructions' and 'inspection_state'");
 
 define('_MI_GWLOTO_CFG_MEDIA_PATH', 'Media File Upload Path');
 define('_MI_GWLOTO_CFG_MEDIA_PATH_DSC', 'Directory where media files are placed when uploaded to the server. Must be writable by the web server.');

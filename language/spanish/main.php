@@ -1,18 +1,17 @@
 <?php
 // Tenga en cuenta que la traducción al español de este módulo es incompleta y puede contener errores.
-if (!defined('XOOPS_ROOT_PATH')) {
-    die('Root path not defined');
-}
+defined('XOOPS_ROOT_PATH') || exit('XOOPS root path not defined');
+
 define('_MD_GWLOTO_TITLE', 'geekwright Lockout Tagout');
 define('_MD_GWLOTO_TITLE_SHORT', 'gwloto : '); // prepends to html page title
 
 define('_MD_GWLOTO_TITLE_INDEX', 'Lugar navegador');
 define('_MD_GWLOTO_TITLE_EDITAUTHS', 'Establecer las autoridades del usuario');
-define('_MD_GWLOTO_TITLE_SELECT',   'Portapapeles de Acciones');
+define('_MD_GWLOTO_TITLE_SELECT', 'Portapapeles de Acciones');
 
-define('_MD_GWLOTO_TITLE_NEWJOB',   'Iniciar una nueva trabajo de control de energía');
+define('_MD_GWLOTO_TITLE_NEWJOB', 'Iniciar una nueva trabajo de control de energía');
 define('_MD_GWLOTO_TITLE_PRINTJOB', 'Imprimir Energía de Control de Documentos de Trabajo');
-define('_MD_GWLOTO_TITLE_VIEWJOB',  'Control de Energía de trabajo Detalle');
+define('_MD_GWLOTO_TITLE_VIEWJOB', 'Control de Energía de trabajo Detalle');
 define('_MD_GWLOTO_TITLE_VIEWSTEP', 'Control de Energía de Trabajo Etapa Detalle');
 define('_MD_GWLOTO_TITLE_LISTJOBS', 'Buscar trabajos de Control de Energía');
 
@@ -21,7 +20,7 @@ define('_MD_GWLOTO_TITLE_NEWPLACE', 'Añadir un nuevo lugar');
 
 define('_MD_GWLOTO_TITLE_VIEWPLAN', 'Ver Plan de Control de Energía');
 define('_MD_GWLOTO_TITLE_EDITPLAN', 'Edición Plan de Control de Energía');
-define('_MD_GWLOTO_TITLE_NEWPLAN',  'Inicio Nuevo Plan de Control de Energía');
+define('_MD_GWLOTO_TITLE_NEWPLAN', 'Inicio Nuevo Plan de Control de Energía');
 
 define('_MD_GWLOTO_TITLE_VIEWPOINT', 'Ver la energía y control de puntos');
 define('_MD_GWLOTO_TITLE_EDITPOINT', 'Punto de Edición Control de Energía');
@@ -66,7 +65,6 @@ define('_MD_GWLOTO_USERAUTH_RPT_AUTHS', 'Autoridad');
 define('_MD_GWLOTO_USERAUTH_RPT_NOAUTH', 'Ninguna autoridad');
 
 define('_MD_GWLOTO_USERAUTH_EXIT', 'Salir del editor Autoridad');
-
 
 define('_MD_GWLOTO_LASTCHG_BY', 'Modificado por');
 define('_MD_GWLOTO_LASTCHG_ON', 'Tiempo de actualización');
@@ -247,17 +245,17 @@ define('_MD_GWLOTO_JOB_PRINT_NODEFS', 'No hay plugins de impresión están insta
 // user authorities
 define('_MD_GWLOTO_USERAUTH_PL_ADMIN_DSC', 'Editar Autoridades del usuario');
 define('_MD_GWLOTO_USERAUTH_PL_AUDIT_DSC', 'Ver Autoridades del usuario');
-define('_MD_GWLOTO_USERAUTH_PL_EDIT_DSC',  'Agregar o Editar Lugares');
+define('_MD_GWLOTO_USERAUTH_PL_EDIT_DSC', 'Agregar o Editar Lugares');
 define('_MD_GWLOTO_USERAUTH_PL_SUPER_DSC', 'Supervisor del Lugar');
 
-define('_MD_GWLOTO_USERAUTH_CP_EDIT_DSC',  'Agregar o editar los planes de control');
-define('_MD_GWLOTO_USERAUTH_CP_VIEW_DSC',  'Control de vistas de los planes');
+define('_MD_GWLOTO_USERAUTH_CP_EDIT_DSC', 'Agregar o editar los planes de control');
+define('_MD_GWLOTO_USERAUTH_CP_VIEW_DSC', 'Control de vistas de los planes');
 
-define('_MD_GWLOTO_USERAUTH_JB_EDIT_DSC',  'Agregar o editar los trabajos');
-define('_MD_GWLOTO_USERAUTH_JB_VIEW_DSC',  'Ver los trabajos');
+define('_MD_GWLOTO_USERAUTH_JB_EDIT_DSC', 'Agregar o editar los trabajos');
+define('_MD_GWLOTO_USERAUTH_JB_VIEW_DSC', 'Ver los trabajos');
 
-define('_MD_GWLOTO_USERAUTH_MD_EDIT_DSC',  'Agregar o editar los archivos multimedia');
-define('_MD_GWLOTO_USERAUTH_MD_VIEW_DSC',  'Navegar por los archivos multimedia');
+define('_MD_GWLOTO_USERAUTH_MD_EDIT_DSC', 'Agregar o editar los archivos multimedia');
+define('_MD_GWLOTO_USERAUTH_MD_VIEW_DSC', 'Navegar por los archivos multimedia');
 
 define('_MD_GWLOTO_USERAUTH_PL_TRANS_DSC', 'Traducir lugares');
 define('_MD_GWLOTO_USERAUTH_CP_TRANS_DSC', 'Traducir los planes de control');
@@ -432,3 +430,5 @@ define('_MD_GWLOTO_GROUPAUTH_DISPLAY', 'Mostrar las actuales autoridades');
 define('_MD_GWLOTO_USERAUTH_BY_USER', 'Edición de usuarios');
 define('_MD_GWLOTO_USERAUTH_BY_GROUP', 'Edición de Grupos');
 define('_MD_GWLOTO_USERAUTH_RPT_GROUP', 'Grupo');
+
+define('_MD_GWLOTO_DELETE_SEL_ONLY_TOP_PLACE', 'Can Not Delete Only Top Level Place');
